@@ -7,12 +7,12 @@ Write-Host " Project Root: $projectRoot" -ForegroundColor Gray
 Write-Host "======================================================================" -ForegroundColor Cyan
 
 Write-Host "`n[1/2] Launching Backend (FastAPI on Port 8000)..." -ForegroundColor Green
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$projectRoot\backend'; python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
+Start-Process powershell -WorkingDirectory "$projectRoot\backend" -ArgumentList "-NoExit", "-Command", "python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload"
 
 Start-Sleep -Seconds 2
 
 Write-Host "[2/2] Launching Frontend (Vite on Port 3000)..." -ForegroundColor Green
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$projectRoot\frontend'; npm run dev"
+Start-Process powershell -WorkingDirectory "$projectRoot\frontend" -ArgumentList "-NoExit", "-Command", "npm run dev"
 
 Write-Host "`n======================================================================" -ForegroundColor Cyan
 Write-Host " All services started:" -ForegroundColor Green
