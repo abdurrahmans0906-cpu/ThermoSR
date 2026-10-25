@@ -17,6 +17,7 @@ from app.api.routes import (
     training,
     experiments,
     model_registry,
+    qa,
 )
 
 @asynccontextmanager
@@ -52,6 +53,7 @@ app.include_router(reconstruction.router, prefix=settings.API_V1_STR)
 app.include_router(training.router, prefix=settings.API_V1_STR)
 app.include_router(experiments.router, prefix=settings.API_V1_STR)
 app.include_router(model_registry.router, prefix=settings.API_V1_STR)
+app.include_router(qa.router, prefix=settings.API_V1_STR)
 
 # Secure Artifact Download Endpoint
 @app.get("/api/artifacts/{file_path:path}")

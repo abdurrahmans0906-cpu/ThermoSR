@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { api } from '../services/api';
 import { ModelVersion, ReconstructionRun } from '../types';
+import { LayaQAPanel } from '../components/LayaQAPanel';
 
 export const Reconstruct: React.FC = () => {
   // Step State (1: Mode, 2: Upload, 3: Settings, 4: Results)
@@ -662,6 +663,22 @@ export const Reconstruct: React.FC = () => {
                     <Download className="h-3.5 w-3.5" /> Reliability Heatmap
                   </a>
                 )}
+              </div>
+
+              {/* Optional Intelligent QA & Experiment Advisor (Laya System 1) */}
+              <div className="pt-2 border-t border-slate-200">
+                <LayaQAPanel
+                  runId={result.id}
+                  taskMode={result.task_mode}
+                  modelArchitecture={result.model_architecture || selectedModelArch}
+                  scaleFactor={result.scale_factor || selectedScale}
+                  inputDimensions={(result.metrics?.input_dimensions as [number, number]) || thermalDims || [80, 60]}
+                  outputDimensions={(result.metrics?.output_dimensions as [number, number]) || [640, 480]}
+                  rgbDimensions={rgbDims}
+                  hasGroundTruth={result.metrics?.has_ground_truth || false}
+                  metrics={result.metrics}
+                  alignmentStatus={rgbFile ? 'unverified' : 'not_applicable'}
+                />
               </div>
             </div>
           ) : (
