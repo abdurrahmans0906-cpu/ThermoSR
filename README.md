@@ -105,3 +105,11 @@ The application includes an optional AI-assisted quality assessment add-on power
   - Purely read-only: guaranteed `reconstruction_modified: false` and `executed: false`.
   - Deterministic mathematical constraints strictly override decision model outputs.
   - Graceful fallback: functions completely via deterministic rules if Laya is uninstalled or offline.
+
+---
+
+## 6. Research Documentation
+
+For the complete scholarly paper, formal mathematical derivations, architecture diagrams, loss formulas, and experimental benchmarks, refer to:
+- **[Full Research Project Document](docs/PROJECT_DOCUMENT.md)**: Follows standard academic structure (Abstract, Introduction, Related Work, Method, Experimentation, Results & Analysis, Conclusion, References).
+
