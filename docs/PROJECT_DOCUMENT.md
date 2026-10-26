@@ -363,7 +363,26 @@ ThermoSR is built with an industrial full-stack architecture prioritizing modula
 
 ---
 
-## 8. Conclusion
+## 8. AI-Assisted QA & Experiment Advisor (Laya System 1 Add-on)
+
+To assist researchers in inspecting reconstruction metadata, identifying missing evaluation evidence, and systematically guiding ablation studies, ThermoSR integrates an optional, read-only decision engine add-on powered by **Laya System 1** [19].
+
+### 8.1 Architectural Role and Non-Invasive Boundaries
+Laya System 1 is a non-autoregressive decision engine designed to evaluate structured context states and return typed choices with mathematically calibrated probabilities in a single forward pass ($\approx 33\ \text{ms}$) [19]. In ThermoSR:
+- **No Image Tensor Processing**: Laya does not process image pixels or alter reconstructed thermal images (`reconstruction_modified: false`).
+- **Deterministic Overrides**: Pure Python validation enforces physical and geometric invariants (positive dimensions, $\times 8$ scale factor consistency, optical alignment verification, ground truth presence, metric value ranges). Deterministic checks strictly override decision model classifications.
+- **Strictly Advisory**: The advisor suggests which existing experiment or ablation run to review next (`thermal_baseline`, `rgb_fusion`, `reliability_fusion`, `rerun_evaluation`, `human_review`); it never automatically launches training or reconstruction jobs (`executed: false`).
+
+### 8.2 Evaluation Review States
+The QA subsystem categorizes evaluation records into four review states:
+1. `ready_for_review`: Complete evidence available, ground-truth reference verified, dimensions consistent, optical alignment confirmed.
+2. `human_review`: Optical alignment unverified/failed or dimension inconsistencies detected requiring manual human verification.
+3. `insufficient_evidence`: Ground-truth thermal reference missing or quantitative metrics unavailable for controlled comparison.
+4. `unavailable`: Laya service offline or uninstalled; system operates in deterministic fallback mode.
+
+---
+
+## 9. Conclusion
 
 Guided thermal super-resolution holds immense potential to overcome the hardware and cost limitations of long-wave infrared sensors. However, unconstrained cross-modal feature fusion introduces significant texture transfer artifacts whenever optical and thermal modalities diverge.
 
@@ -371,7 +390,7 @@ In this project, we designed and implemented **ThermoSR**, demonstrating that **
 
 ---
 
-## 9. References
+## 10. References
 
 - [1] J. M. Lloyd, *Thermal Imaging Systems*, Plenum Press, New York, 1975.
 - [2] R. G. Driggers, P. Cox, and T. Edwards, *Introduction to Infrared and Electro-Optical Systems*, Artech House, 1999.
@@ -391,3 +410,4 @@ In this project, we designed and implemented **ThermoSR**, demonstrating that **
 - [16] Z. Hui, X. Wang, and X. Gao, "Fast and Accurate Image Super-Resolution with Deep Runge-Kutta Networks," *IEEE Transactions on Image Processing (TIP)*, vol. 28, no. 8, pp. 3960–3972, 2019.
 - [17] A. Kendall and Y. Gal, "What Uncertainties Do We Need in Bayesian Deep Learning for Computer Vision?," *Advances in Neural Information Processing Systems (NeurIPS)*, pp. 5574–5584, 2017.
 - [18] H. Zhang, V. Sindagi, and V. M. Patel, "Multi-Scale Gated Fusion Network for Single Image Dehazing," *IEEE Transactions on Image Processing (TIP)*, vol. 29, pp. 799–812, 2020.
+- [19] N. Mukkunnoth, "Laya: A Fast, Multilingual System 1 Decision Engine with Calibrated Probabilities," *GitHub Repository & Documentation*, 2026. [Online]. Available: https://github.com/NandhaKishorM/laya
