@@ -23,9 +23,12 @@ def recommend_next_experiment(req: ExperimentRecommendationRequest) -> Dict[str,
         evidence_used.append(f"current_architecture={req.current_architecture}")
 
     metrics = req.metrics or {}
-    psnr = metrics.get("psnr")
-    ssim = metrics.get("ssim")
-    lpips = metrics.get("lpips")
+    psnr_raw = metrics.get("psnr")
+    psnr = float(psnr_raw) if psnr_raw is not None and isinstance(psnr_raw, (int, float)) else None
+    ssim_raw = metrics.get("ssim")
+    ssim = float(ssim_raw) if ssim_raw is not None and isinstance(ssim_raw, (int, float)) else None
+    lpips_raw = metrics.get("lpips")
+    lpips = float(lpips_raw) if lpips_raw is not None and isinstance(lpips_raw, (int, float)) else None
 
     if psnr is not None:
         evidence_used.append(f"psnr={psnr:.2f}dB")

@@ -11,7 +11,7 @@ class QAMetadataInput(BaseModel):
     rgb_shape: Optional[List[int]] = Field(None, description="RGB guidance shape [width, height]")
     alignment_status: str = Field("unverified", description="RGB/Thermal alignment: verified, unverified, failed, not_applicable")
     ground_truth_available: bool = Field(False, description="Whether ground-truth thermal reference is available")
-    metrics: Optional[Dict[str, Optional[float]]] = Field(default_factory=dict, description="Calculated evaluation metrics")
+    metrics: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Calculated evaluation metrics")
     evaluation_timestamp: Optional[str] = Field(None, description="ISO timestamp of evaluation")
     deterministic_warnings: Optional[List[str]] = Field(default_factory=list, description="Pre-computed warnings")
 
@@ -63,19 +63,19 @@ class QAMetadataInput(BaseModel):
 
     @field_validator("metrics")
     @classmethod
-    def validate_metrics_ranges(cls, v: Optional[Dict[str, Optional[float]]]) -> Optional[Dict[str, Optional[float]]]:
+    def validate_metrics_ranges(cls, v: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
         if not v:
             return v
         ssim = v.get("ssim")
-        if ssim is not None and not (-1.0 <= ssim <= 1.0):
+        if ssim is not None and isinstance(ssim, (int, float)) and not (-1.0 <= ssim <= 1.0):
             raise ValueError(f"SSIM must be between -1.0 and 1.0, got {ssim}")
         
         psnr = v.get("psnr")
-        if psnr is not None and (psnr < 0.0 or psnr > 100.0):
+        if psnr is not None and isinstance(psnr, (int, float)) and (psnr < 0.0 or psnr > 100.0):
             raise ValueError(f"PSNR must be between 0.0 and 100.0 dB, got {psnr}")
 
         lpips = v.get("lpips")
-        if lpips is not None and lpips < 0.0:
+        if lpips is not None and isinstance(lpips, (int, float)) and lpips < 0.0:
             raise ValueError(f"LPIPS must be non-negative, got {lpips}")
 
         return v
@@ -108,7 +108,7 @@ class ExperimentRecommendationRequest(BaseModel):
     scale_factor: int = Field(8, description="Thermal SR scale factor")
     alignment_status: str = Field("unverified", description="verified, unverified, failed, not_applicable")
     ground_truth_available: bool = Field(False, description="Ground truth availability")
-    metrics: Optional[Dict[str, Optional[float]]] = Field(default_factory=dict, description="Current run metrics")
+    metrics: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Current run metrics")
     deterministic_warnings: Optional[List[str]] = Field(default_factory=list)
     comparison_results: Optional[Dict[str, Any]] = None
 
