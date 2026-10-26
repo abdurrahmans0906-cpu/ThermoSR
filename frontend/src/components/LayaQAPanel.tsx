@@ -12,6 +12,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { layaQAService } from '../services/layaQA';
+import { formatApiError } from '../services/api';
 import {
   QAAssessmentResponse,
   ExperimentRecommendationResponse,
@@ -78,7 +79,7 @@ export const LayaQAPanel: React.FC<LayaQAPanelProps> = ({
       setRecommendation(recRes);
     } catch (err: any) {
       console.error('Laya QA analysis failed:', err);
-      setErrorMsg(err.response?.data?.detail || err.message || 'Unable to connect to Laya QA Service.');
+      setErrorMsg(formatApiError(err, 'Unable to connect to Laya QA Service.'));
     } finally {
       setLoading(false);
     }

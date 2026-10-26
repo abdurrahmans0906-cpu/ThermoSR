@@ -126,3 +126,25 @@ export const api = {
     return `/api/artifacts/${path}`;
   },
 };
+
+export function formatApiError(err: any, fallback: string = 'An unexpected error occurred'): string {
+  if (!err) return fallback;
+  const detail = err.response?.data?.detail;
+  if (typeof detail === 'string') {
+    return detail;
+  }
+  if (Array.isArray(detail)) {
+    return detail
+      .map((d: any) => {
+        if (typeof d === 'string') return d;
+        const loc = Array.isArray(d.loc) ? d.loc.filter((x: any) => x !== 'body').join('.') : '';
+        return loc ? `${loc}: ${d.msg || JSON.stringify(d)}` : d.msg || JSON.stringify(d);
+      })
+      .join('; ');
+  }
+  if (detail && typeof detail === 'object') {
+    return detail.msg || JSON.stringify(detail);
+  }
+  return err.message || fallback;
+}
+

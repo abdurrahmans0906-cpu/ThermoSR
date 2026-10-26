@@ -19,7 +19,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { api } from '../services/api';
+import { api, formatApiError } from '../services/api';
 import { TrainingRun, Dataset, DeviceInfo } from '../types';
 
 export const TrainingLab: React.FC = () => {
@@ -97,7 +97,7 @@ export const TrainingLab: React.FC = () => {
       setActiveRun(created);
       await fetchRuns();
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.detail || 'Failed to start training run.');
+      setErrorMsg(formatApiError(err, 'Failed to start training run.'));
     } finally {
       setIsStarting(false);
     }

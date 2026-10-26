@@ -11,7 +11,7 @@ import {
   Columns,
   Image as ImageIcon,
 } from 'lucide-react';
-import { api } from '../services/api';
+import { api, formatApiError } from '../services/api';
 import { ModelVersion, ReconstructionRun } from '../types';
 import { LayaQAPanel } from '../components/LayaQAPanel';
 
@@ -142,7 +142,7 @@ export const Reconstruct: React.FC = () => {
       setProgressPct(100);
       setJobStatus('Completed');
     } catch (err: any) {
-      setErrorMsg(err.response?.data?.detail || 'Reconstruction failed.');
+      setErrorMsg(formatApiError(err, 'Reconstruction failed.'));
     } finally {
       setIsProcessing(false);
     }
